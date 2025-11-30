@@ -79,5 +79,3 @@ restart_systemd
 echo
 echo "Installation complete."
 echo "Metrics available at: http://<host>:9105/metrics"
-https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/deploy/systemd/hardware_exporter
-https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/deploy/systemd/hardware_exporter
