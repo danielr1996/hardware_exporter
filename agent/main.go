@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -37,8 +38,12 @@ func collectAll() Inventory {
 }
 
 func main() {
+	inv := collectAll()
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(NewInventoryCollector(inv))
+
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 
 	// Try IPv4 listener
 	ipv4, err4 := net.Listen("tcp4", "0.0.0.0:9105")
