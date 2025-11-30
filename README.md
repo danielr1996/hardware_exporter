@@ -21,3 +21,8 @@ Install the agent on every host using this script (install the binary and a syst
 curl https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/install.sh | bash
 ```
 
+## Development
+```shell
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/hardware_exporter .
+
+```
