@@ -41,7 +41,6 @@ install_binary() {
   echo "Installing binary to ${INSTALL_PATH}"
   sudo mv "./${BINARY_NAME}" "$INSTALL_PATH"
   sudo chmod 755 "$INSTALL_PATH"
-  sudo chown "$SERVICE_USER":"$SERVICE_USER" "$INSTALL_PATH"
 }
 
 install_service() {
@@ -80,3 +79,5 @@ restart_systemd
 echo
 echo "Installation complete."
 echo "Metrics available at: http://<host>:9105/metrics"
+https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/deploy/systemd/hardware_exporter
+https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/deploy/systemd/hardware_exporter
