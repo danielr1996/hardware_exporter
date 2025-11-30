@@ -5,30 +5,30 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=hardware_exporter
-Group=hardware_exporter
+#User=hardware_exporter
+#Group=hardware_exporter
 ExecStart=/usr/local/bin/hardware_exporter
 Restart=on-failure
 RestartSec=5
 
 # Security hardening
-NoNewPrivileges=true
-ProtectSystem=full
-ProtectHome=true
-PrivateTmp=true
-PrivateDevices=true
-ProtectHostname=true
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectKernelLogs=true
-ProtectControlGroups=true
-MemoryDenyWriteExecute=true
-LockPersonality=true
+#NoNewPrivileges=true
+#ProtectSystem=full
+#ProtectHome=true
+#PrivateTmp=true
+#PrivateDevices=true
+#ProtectHostname=true
+#ProtectKernelTunables=true
+#ProtectKernelModules=true
+#ProtectKernelLogs=true
+#ProtectControlGroups=true
+#MemoryDenyWriteExecute=true
+#LockPersonality=true
 
-AmbientCapabilities=
-CapabilityBoundingSet=
-RestrictRealtime=true
-RestrictSUIDSGID=true
+#AmbientCapabilities=
+#CapabilityBoundingSet=
+#RestrictRealtime=true
+#RestrictSUIDSGID=true
 
 # Optional: restrict network access (exporter only lists hardware)
 #PrivateNetwork=true

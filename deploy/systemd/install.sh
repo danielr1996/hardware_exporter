@@ -1,21 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# -------------------------------------------
-# DEFAULT CONFIGURATION
-# -------------------------------------------
-
-# Set your static default URL here:
-DEFAULT_BASE_URL="https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/"
-
-# This variable may be overridden by --url
+DEFAULT_BASE_URL="https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main"
 BASE_URL="$DEFAULT_BASE_URL"
-
 SERVICE_NAME="hardware-exporter.service"
 BINARY_NAME="hardware_exporter"
 INSTALL_PATH="/usr/local/bin/${BINARY_NAME}"
 SERVICE_PATH="/etc/systemd/system/${SERVICE_NAME}"
-SERVICE_USER="hardware_exporter"
 
 usage() {
   echo "Usage: $0 [--url <custom_base_url>]"
@@ -38,23 +29,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# -------------------------------------------
-# FUNCTIONS
-# -------------------------------------------
-
 download() {
   local url="$1"
   local out="$2"
 
   echo "Downloading $url → $out"
   curl -fsSL "$url" -o "$out"
-}
-
-ensure_user() {
-  if ! id -u "$SERVICE_USER" >/dev/null 2>&1; then
-    echo "Creating system user: $SERVICE_USER"
-    sudo useradd -r -s /usr/sbin/nologin "$SERVICE_USER"
-  fi
 }
 
 install_binary() {
@@ -83,22 +63,16 @@ restart_systemd() {
   echo "Service status:"
   sudo systemctl status "${SERVICE_NAME}" --no-pager
 }
-
-# -------------------------------------------
-# MAIN EXECUTION
-# -------------------------------------------
-
 echo "=== Inventory Exporter Installer ==="
 echo "Using download URL: $BASE_URL"
 echo
 
-BIN_URL="${BASE_URL}/dist/hardware_exporter"
-SVC_URL="${BASE_URL}/dist/hardware-exporter.service"
+BIN_URL="${BASE_URL}/deploy/systemd/hardware_exporter"
+SVC_URL="${BASE_URL}/deploy/systemd/hardware-exporter.service"
 
 download "$BIN_URL" "${BINARY_NAME}"
 download "$SVC_URL" "${SERVICE_NAME}"
 
-ensure_user
 install_binary
 install_service
 restart_systemd

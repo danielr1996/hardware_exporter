@@ -28,10 +28,10 @@ func collectAll() collector.Inventory {
 }
 
 func main() {
+	print("test")
 	inv := collectAll()
 	reg := prometheus.NewRegistry()
 	reg.MustRegister(collector.NewInventoryCollector(inv))
-
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 

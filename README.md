@@ -18,7 +18,7 @@ therefore you also need [json_exporter](https://github.com/prometheus-community/
 Install the agent on every host using this script (install the binary and a systemd service)
 
 ```shell
-curl https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/install.sh | bash
+curl https://raw.githubusercontent.com/danielr1996/hardware_exporter/refs/heads/main/deploy/systemd/install.sh | bash
 ```
 
 ## Development

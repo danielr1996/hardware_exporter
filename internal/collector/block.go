@@ -1,9 +1,11 @@
 package collector
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/danielr1996/hardware_exporter/internal/util"
 )
@@ -17,32 +19,39 @@ type BlockDevice struct {
 func CollectBlockDevices() []BlockDevice {
 	var result []BlockDevice
 
-	filepath.WalkDir("/sys/block", func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return nil
+	entries, err := os.ReadDir("/sys/block")
+	if err != nil {
+		log.Printf("read /sys/block failed: %v", err)
+		return result
+	}
+
+	for _, e := range entries {
+		name := e.Name()
+		if strings.HasPrefix(name, "loop") ||
+			strings.HasPrefix(name, "dm-") ||
+			strings.HasPrefix(name, "zram") ||
+			strings.HasPrefix(name, "ram") ||
+			strings.HasPrefix(name, "nbd") {
+			continue
 		}
-		if path == "/sys/block" {
-			return nil
-		}
-		if d.IsDir() && filepath.Dir(path) == "/sys/block" {
-			name := d.Name()
 
-			sizeStr := util.ReadFirstLine(filepath.Join(path, "size"))
-			rotStr := util.ReadFirstLine(filepath.Join(path, "queue/rotational"))
+		// Real path (follow symlink)
+		devicePath := filepath.Join("/sys/block", name)
 
-			secs, _ := strconv.ParseUint(sizeStr, 10, 64)
-			size := secs * 512
+		// size is inside the symlink target dir
+		sizeStr := util.ReadFirstLine(filepath.Join(devicePath, "size"))
+		rotStr := util.ReadFirstLine(filepath.Join(devicePath, "queue/rotational"))
 
-			rot := rotStr == "1"
+		secs, _ := strconv.ParseUint(sizeStr, 10, 64)
+		size := secs * 512
+		rot := rotStr == "1"
 
-			result = append(result, BlockDevice{
-				Name:       name,
-				SizeBytes:  size,
-				Rotational: rot,
-			})
-		}
-		return nil
-	})
+		result = append(result, BlockDevice{
+			Name:       name,
+			SizeBytes:  size,
+			Rotational: rot,
+		})
+	}
 
 	return result
 }
